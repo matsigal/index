@@ -1029,14 +1029,16 @@
 
 <script>
   function submitForm() {
-    const empresa = document.getElementById('empresa').value.trim();
-    const nombre = document.getElementById('nombre').value.trim();
-    const email = document.getElementById('email').value.trim();
+    const empresa  = document.getElementById('empresa').value.trim();
+    const nombre   = document.getElementById('nombre').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
     const empleados = document.getElementById('empleados').value;
+    const rubro    = document.getElementById('rubro').value;
     const objetivo = document.getElementById('objetivo').value;
+    const comentarios = document.getElementById('comentarios').value.trim();
 
     if (!empresa || !nombre || !email || !empleados || !objetivo) {
-      // shake effect
       const btn = document.querySelector('.form-submit');
       btn.style.background = '#8b2020';
       btn.textContent = 'Completá los campos obligatorios';
@@ -1047,9 +1049,37 @@
       return;
     }
 
+    // Prendas seleccionadas
+    const prendas = [];
+    if (document.getElementById('c1').checked) prendas.push('Camisas');
+    if (document.getElementById('c2').checked) prendas.push('Pantalones Chinos');
+    if (document.getElementById('c3').checked) prendas.push('Sweaters');
+    if (document.getElementById('c4').checked) prendas.push('Chombas');
+    if (document.getElementById('c5').checked) prendas.push('Accesorios');
+    if (document.getElementById('c6').checked) prendas.push('Propuesta completa');
+
+    // Armar mensaje para WhatsApp
+    const msg = [
+      '🧥 *NUEVA SOLICITUD CORPORATIVA*',
+      '',
+      '🏢 *Empresa:* ' + empresa,
+      '👤 *Contacto:* ' + nombre,
+      '📧 *Email:* ' + email,
+      '📱 *Teléfono:* ' + (telefono || 'No indicado'),
+      '👥 *Empleados:* ' + empleados,
+      '🏭 *Rubro:* ' + (rubro || 'No indicado'),
+      '🎯 *Objetivo:* ' + objetivo,
+      '👕 *Prendas de interés:* ' + (prendas.length ? prendas.join(', ') : 'No especificado'),
+      '💬 *Comentarios:* ' + (comentarios || 'Ninguno'),
+    ].join('%0A');
+
+    // Abrir WhatsApp
+    const waUrl = 'https://wa.me/5491136280888?text=' + msg;
+    window.open(waUrl, '_blank');
+
+    // Mostrar pantalla de éxito
     document.getElementById('formContainer').style.display = 'none';
-    const success = document.getElementById('formSuccess');
-    success.classList.add('show');
+    document.getElementById('formSuccess').classList.add('show');
   }
 
   // Scroll reveal
