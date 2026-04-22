@@ -1073,6 +1073,24 @@
       '💬 *Comentarios:* ' + (comentarios || 'Ninguno'),
     ].join('%0A');
 
+    // Enviar por mail via Formspree
+    const formData = new FormData();
+    formData.append('Empresa', empresa);
+    formData.append('Contacto', nombre);
+    formData.append('Email', email);
+    formData.append('Telefono', telefono || 'No indicado');
+    formData.append('Empleados', empleados);
+    formData.append('Rubro', rubro || 'No indicado');
+    formData.append('Objetivo', objetivo);
+    formData.append('Prendas', prendas.length ? prendas.join(', ') : 'No especificado');
+    formData.append('Comentarios', comentarios || 'Ninguno');
+
+    fetch('https://formspree.io/f/xyklndrp', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+
     // Abrir WhatsApp
     const waUrl = 'https://wa.me/5491136280888?text=' + msg;
     window.open(waUrl, '_blank');
